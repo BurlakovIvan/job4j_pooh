@@ -25,10 +25,8 @@ public class TopicService implements Service {
             status = "200";
         } else if ("GET".equals(httpRequestType)) {
             topics.putIfAbsent(sourceName, new ConcurrentHashMap<>());
-            var topic = topics.get(sourceName);
             topics.get(sourceName).putIfAbsent(param, new ConcurrentLinkedQueue<>());
-            var recipient = topic.get(param);
-            text = recipient.poll();
+            text = topics.get(sourceName).get(param).poll();
             if (text == null) {
                 text = "";
                 status = "204";
